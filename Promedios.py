@@ -1,8 +1,8 @@
-def obtener_num(mensaje, minimo=1, maximo=None):  # Funcion para obtener valores enteros validos
+def obtener_num(mensaje, minimo=1, maximo=None):  # Función para obtener valores enteros válidos
     valido = False
     while not valido:
         entrada = input(mensaje)
-        if entrada.isdigit():  # Verifica si la entrada es un número
+        if entrada.isdigit():
             valor = int(entrada)
             if valor >= minimo and (maximo is None or valor <= maximo):
                 return valor
@@ -21,46 +21,55 @@ def calcular_promedio(lista):
     promedio = suma / len(lista)
     return promedio
 
+def contar_aprobados_reprobados(lista_estudiantes):
+    aprobados = 0
+    reprobados = 0
+    for est in lista_estudiantes:
+        if est["estado"] == "Aprobado":
+            aprobados += 1
+        else:
+            reprobados += 1
+    return aprobados, reprobados
+
 # Programa principal
-estudiantes=[]
-calificaciones=[]
+estudiantes = []
 print("Sistema de promedios de estudiantes\n")
-num_estudiantes = obtener_num("\nIngrese el numero de estudiantes: ")
+num_estudiantes = obtener_num("\nIngrese el número de estudiantes: ")
 print("Ingrese las calificaciones de los estudiantes:")
 
 for i in range(num_estudiantes):
     print(f"\nEstudiante {i+1}")
     
     # Validación nombre no vacío
-    valido=False
-    while valido==False:
-        nombre=input("Nombre: ")
-        if nombre=="":
+    while True:
+        nombre = input("Nombre: ")
+        if nombre.strip() == "":
             print("Error: El nombre no puede estar vacío")
         else:
             break
 
-    calificaciones = [] #Reinicia la calif. por estudiante    
+    calificaciones = []  # Reinicia la lista de calificaciones por estudiante    
     
     for j in range(3):
         calificacion = obtener_num(f"Calificación Materia {j + 1} (0-10): ", 0, 10)
         calificaciones.append(calificacion)
     
     promedio = calcular_promedio(calificaciones)
-    #estado = evaluar_aprobacion(promedio)
 
-    estudiantes.append({ #se usa un diccionario para estudiantes
+    estudiantes.append({
         "nombre": nombre,
         "promedio": promedio,
-        "estado": "Aprobado"
-        if promedio >= 6 else "Reprobado"
+        "estado": "Aprobado" if promedio >= 6 else "Reprobado"
     })
 
-#Mostrar resultados
+# Mostrar resultados
 print("\n--- RESULTADOS ---")
 
 for estudiante in estudiantes:
     print(f"{estudiante['nombre']} - Promedio: {estudiante['promedio']:.1f} - {estudiante['estado']}")
 
-print(f"\nTotal de estudiantes aprobados: ")
-print(f"Total de estudiantes reprobados: ")
+# Contar aprobados y reprobados
+aprobados, reprobados = contar_aprobados_reprobados(estudiantes)
+
+print(f"\nTotal de estudiantes aprobados: {aprobados}")
+print(f"Total de estudiantes reprobados: {reprobados}")
